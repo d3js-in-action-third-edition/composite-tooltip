@@ -1,6 +1,6 @@
 const createTooltip = (data) => {
 
-  const tooltipWidth = 180;
+  const tooltipWidth = 100;
   const tooltipHeight = 190;
   const textColor = "#494e4f";
 
@@ -27,21 +27,22 @@ const createTooltip = (data) => {
       .style("fill", textColor)
       .attr('text-anchor', 'middle');
 
-  const tooltipBackground = tooltip
-    .append("rect")
-      .attr("x", -1 * tooltipWidth/2)
-      .attr("y", -1 * margin.top)
-      .attr("width", tooltipWidth)
-      .attr("height", tooltipHeight)
-      .attr("rx", 4)
-      .attr("ry", 4)
-      .attr("fill", "#dfe9ed");
+  // const tooltipBackground = tooltip
+  //   .append("rect")
+  //     .attr("x", -1 * tooltipWidth/2)
+  //     .attr("y", -1 * margin.top)
+  //     .attr("width", tooltipWidth)
+  //     .attr("height", tooltipHeight)
+  //     .attr("rx", 4)
+  //     .attr("ry", 4)
+  //     .attr("fill", "#dfe9ed");
 
   const tooltipContent = tooltip
+    .append("g")
+      .attr("transform", `translate(${-1 * tooltipWidth/2}, ${-1 * margin.top + 30})`);
+  const tooltipText = tooltipContent
     .append("text")
       .attr("class", "tooltip-content")
-      .attr("x", -1 * tooltipWidth/2 + 20)
-      .attr("y", -1 * margin.top + 30)
       .style("font-size", "14px")
       .style("font-weight", 500)
       .style("fill", textColor);
@@ -52,17 +53,24 @@ const createTooltip = (data) => {
     total1973 = total1973 + data1973[format.id];
   });
 
-  tooltipContent
+  tooltipText
     .append("tspan")
       .attr("class", "sales-total")
-      .text(`Total sales: ${d3.format(",.2r")(total1973)}M$`);;
-  formatsInfo.forEach(format => {
-    tooltipContent
+      .text(`Total: ${d3.format(",.2r")(total1973)}M$`);;
+  formatsInfo.forEach((format, i) => {
+    tooltipText
       .append("tspan")
         .attr("class", `sales-${format.id}`)
-        .attr("x", -1 * tooltipWidth/2 + 20)
-        .attr("dy", 20)
+        .attr("x", 0)
+        .attr("dy", 22)
         .text(`${format.label}: ${d3.format(",.2r")(data1973[format.id])}M$`);
+
+    tooltipContent
+      .append("circle")
+      .attr("cx", -10)
+      .attr("cy", (i + 1) * 22 - 5)
+      .attr("r", 6)
+      .attr("fill", format.color);
   });
 
 }
@@ -97,7 +105,7 @@ const handleMouseEvents = (data) => {
       });
 
       d3.select(".sales-total")
-        .text(`Total sales: ${d3.format(",.2r")(totalSales)}M$`);
+        .text(`Total: ${d3.format(",.2r")(totalSales)}M$`);
 
     });
 
