@@ -85,7 +85,8 @@ const handleMouseEvents = (data) => {
 
       // Set the position of the tooltip according to the x-position of the mouse
       // console.log(e);
-      const xPosition = e.offsetX - margin.left;
+      console.log(d3.pointer(e))
+      const xPosition = d3.pointer(e)[0];
       d3.select(".tooltip").attr("transform", `translate(${xPosition}, 0)`);
 
       // Get the year corresponding to the x-position and set the text of the tooltip"s year label
