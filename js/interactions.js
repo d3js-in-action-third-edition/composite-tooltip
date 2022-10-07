@@ -81,7 +81,7 @@ const createTooltip = (data) => {
 const handleMouseEvents = (data) => {
 
   d3.selectAll(".areas-container path")
-    .on("mousemove", (e, d) => {
+    .on("mousemove", e => {
 
       // Set the position of the tooltip according to the x-position of the mouse
       // console.log(e);
