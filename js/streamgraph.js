@@ -34,7 +34,7 @@ const drawStreamGraph = (data) => {
   /*************************************/
   const stackGenerator = d3.stack()
     .keys(formatsInfo.map(f => f.id))
-    .order(d3.stackOrderInsideOut)
+    .order(d3.stackOrderAscending)
     .offset(d3.stackOffsetSilhouette);
 
   const annotatedData = stackGenerator(data);

@@ -3,39 +3,30 @@ const createTooltip = (data) => {
   const tooltipWidth = 100;
   const tooltipHeight = 190;
   const textColor = "#494e4f";
+  const textLineHeight = 22;
 
   const tooltip = innerChart
-    .append('g')
-      .attr('class', 'tooltip')
-      .style('font-size', '14px');
+    .append("g")
+      .attr("class", "tooltip")
+      .style("font-size", "14px");
   const tooltipLine = tooltip
-    .append('line')
-      .attr('x1', 0)
-      .attr('x2', 0)
-      .attr('y1', -1 * (margin.top - tooltipHeight))
-      .attr('y2', innerHeight)
-      .attr('stroke', textColor)
+    .append("line")
+      .attr("x1", 0)
+      .attr("x2", 0)
+      .attr("y1", -1 * (margin.top - tooltipHeight))
+      .attr("y2", innerHeight)
+      .attr("stroke", textColor)
       .attr("stroke-width", 2)
-      .attr('stroke-dasharray', '6 4');
+      .attr("stroke-dasharray", "6 4");
   const tooltipYear = tooltip
-    .append('text')
+    .append("text")
       .attr("class", "tooltip-year")
-      .attr('x', 0)
-      .attr('y', innerHeight + 25)
-      .style('font-size', '16px')
-      .style('font-weight', 700)
+      .attr("x", 0)
+      .attr("y", innerHeight + 25)
+      .style("font-size", "16px")
+      .style("font-weight", 700)
       .style("fill", textColor)
-      .attr('text-anchor', 'middle');
-
-  // const tooltipBackground = tooltip
-  //   .append("rect")
-  //     .attr("x", -1 * tooltipWidth/2)
-  //     .attr("y", -1 * margin.top)
-  //     .attr("width", tooltipWidth)
-  //     .attr("height", tooltipHeight)
-  //     .attr("rx", 4)
-  //     .attr("ry", 4)
-  //     .attr("fill", "#dfe9ed");
+      .attr("text-anchor", "middle");
 
   const tooltipContent = tooltip
     .append("g")
@@ -52,26 +43,35 @@ const createTooltip = (data) => {
   formatsInfo.forEach(format => {
     total1973 = total1973 + data1973[format.id];
   });
-
-  tooltipText
-    .append("tspan")
-      .attr("class", "sales-total")
-      .text(`Total: ${d3.format(",.2r")(total1973)}M$`);;
   formatsInfo.forEach((format, i) => {
     tooltipText
       .append("tspan")
         .attr("class", `sales-${format.id}`)
         .attr("x", 0)
-        .attr("dy", 22)
+        .attr("y", i * textLineHeight)
         .text(`${format.label}: ${d3.format(",.2r")(data1973[format.id])}M$`);
 
     tooltipContent
       .append("circle")
       .attr("cx", -10)
-      .attr("cy", (i + 1) * 22 - 5)
+      .attr("cy", i * textLineHeight - 5)
       .attr("r", 6)
       .attr("fill", format.color);
   });
+
+  tooltipText
+    .append("tspan")
+      .attr("class", "sales-total")
+      .attr("x", 0)
+      .attr("dy", textLineHeight)
+      .text(`Total: ${d3.format(",.2r")(total1973)}M$`);
+  tooltipContent
+    .append("line")
+      .attr("x1", -20)
+      .attr("y1", formatsInfo.length * textLineHeight - 16)
+      .attr("x2", tooltipWidth + 20)
+      .attr("y2", formatsInfo.length * textLineHeight - 16)
+      .attr("stroke", textColor);
 
 }
 
@@ -83,9 +83,9 @@ const handleMouseEvents = (data) => {
       // Set the position of the tooltip according to the x-position of the mouse
       // console.log(e);
       const xPosition = e.offsetX - margin.left;
-      d3.select(".tooltip").attr('transform', `translate(${xPosition}, 0)`);
+      d3.select(".tooltip").attr("transform", `translate(${xPosition}, 0)`);
 
-      // Get the year corresponding to the x-position and set the text of the tooltip's year label
+      // Get the year corresponding to the x-position and set the text of the tooltip"s year label
       // scaleX is a continuous scale, which means it can return any floating number
       // Since the years are integers, we need to round the value returned by the scale
       const year = Math.round(xScale.invert(e.offsetX - margin.left)); 
