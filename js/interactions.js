@@ -92,7 +92,7 @@ const handleMouseEvents = (data) => {
       // Get the year corresponding to the x-position and set the text of the tooltip"s year label
       // scaleX is a continuous scale, which means it can return any floating number
       // Since the years are integers, we need to round the value returned by the scale
-      const year = Math.round(xScale.invert(e.offsetX - margin.left)); 
+      const year = Math.round(xScale.invert(xPosition)); 
       d3.select(".tooltip-year").text(year);
 
       // Populate the tooltip content
