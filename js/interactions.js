@@ -4,6 +4,8 @@ const createTooltip = (data) => {
   const tooltipHeight = 190;
   const textColor = "#494e4f";
   const textLineHeight = 22;
+  const firstYear = d3.min(data, d => d.year);
+  const dataFirstYear = data.find(item => item.year === firstYear);
 
   const tooltip = innerChart
     .append("g")
@@ -26,7 +28,8 @@ const createTooltip = (data) => {
       .style("font-size", "16px")
       .style("font-weight", 700)
       .style("fill", textColor)
-      .attr("text-anchor", "middle");
+      .attr("text-anchor", "middle")
+      .text(firstYear);
 
   const tooltipContent = tooltip
     .append("g")
@@ -38,10 +41,10 @@ const createTooltip = (data) => {
       .style("font-weight", 500)
       .style("fill", textColor);
 
-  const data1973 = data.find(item => item.year === 1973);
+  
   let total1973 = 0;
   formatsInfo.forEach(format => {
-    total1973 = total1973 + data1973[format.id];
+    total1973 = total1973 + dataFirstYear[format.id];
   });
   formatsInfo.forEach((format, i) => {
     tooltipText
@@ -49,7 +52,7 @@ const createTooltip = (data) => {
         .attr("class", `sales-${format.id}`)
         .attr("x", 0)
         .attr("y", i * textLineHeight)
-        .text(`${format.label}: ${d3.format(",.2r")(data1973[format.id])}M$`);
+        .text(`${format.label}: ${d3.format(",.2r")(dataFirstYear[format.id])}M$`);
 
     tooltipContent
       .append("circle")
